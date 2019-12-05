@@ -7,11 +7,11 @@
     "homepage_url": "https://github.com/realslimshanky/Spider-Sense",
 
     "icons": {
-        "48": "icons/SeekClipart.com_blitz-clipart_204510.png"
+        "128": "icons/icon.png"
     },
 
     "browser_action": {
-        "default_icon": "icons/SeekClipart.com_blitz-clipart_204510.png",
+        "default_icon": "icons/icon.png",
         "default_popup": "popup/spider_sense.html",
         "default_title": "Spider Sense"
     },
