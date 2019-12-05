@@ -86,7 +86,7 @@ function verifyJobID(job_id) {
                     saveJobID(job_id)
                 } else {
                     document.querySelector('input.job-id-input').value = ''
-                    document.querySelector('input.job-id-input').placeholder = 'Please enter valid Job ID'
+                    document.querySelector('input.job-id-input').placeholder = 'Please enter valid Job ID or URL'
                     document.querySelector('.message').style.display = 'none'
                     document.querySelector('.add-new-job').style.display = 'block'
                 }
@@ -107,7 +107,7 @@ function addNewJobIDHandler () {
     job_id = job_id.match(job_id_regex)
     if (!job_id) {
         document.querySelector('input.job-id-input').value = ''
-        document.querySelector('input.job-id-input').placeholder = 'Please enter valid Job ID'
+        document.querySelector('input.job-id-input').placeholder = 'Please enter valid Job ID or URL'
     } else {
         job_id = job_id[0]
         document.querySelector('.add-new-job').style.display = 'none'
