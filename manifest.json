@@ -16,7 +16,7 @@
     },
 
     "background": {
-        "scripts": ["background-script.js"]
+        "scripts": ["browser-polyfill.min.js", "background-script.js"]
     },
 
     "permissions": ["storage"]
