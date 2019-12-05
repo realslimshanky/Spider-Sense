@@ -9,3 +9,6 @@ A browser extension to monitor your spiders deployed on Scrapy Cloud.
 - Select `manifest.json` file present in this repository
 - You'll see a black 'Bolt' icon on the Extension/Add-on bar of respective browser
 - Click on the icon to enable the popup and follow instructions
+
+
+> Please create issue if you find some, hope this extension helps your workflow :) - [Shashank](https://github.com/realslimshanky/)
