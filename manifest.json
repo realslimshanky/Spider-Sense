@@ -1,0 +1,23 @@
+{
+
+    "manifest_version": 2,
+    "name": "Spider Sense",
+    "version": "0.1",
+    "description": "Spider Sense helps Spider developers working with Scrapy Cloud monitor jobs.",
+
+    "icons": {
+        "48": "icons/SeekClipart.com_blitz-clipart_204510.png"
+    },
+
+    "browser_action": {
+        "default_icon": "icons/SeekClipart.com_blitz-clipart_204510.png",
+        "default_popup": "popup/spider_sense.html",
+        "default_title": "Spider Sense"
+    },
+
+    "background": {
+        "scripts": ["background-script.js"]
+    },
+
+    "permissions": ["storage", "notifications"]
+}

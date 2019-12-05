@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spider Sense</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="spider_sense.css">
+</head>
+<body>
+    <div class="flex-container">
+        <div class="header-div">
+            <h3>Spider Sense</h3>
+        </div>
+        <hr class="divider">
+        <div class="content-div">
+            <div>
+                Scrapy Cloud API Key
+            </div>
+            <div>
+                <input class="api-key-input" type="text" name="scrapy_cloud_api_key">
+            </div>
+            <div>
+                <button id="api-key-submit" class="api-key-submit">
+                    <h4>Submit</h4>
+                </button>
+            </div>
+            <div>
+                <div>How to get your key?</div>
+                <div>1. Signup on scrapinghub.com</div>
+                <div>2. Visit <a href="https://app.scrapinghub.com/account/apikey">app.scrapinghub.com/account/apikey</a></div>
+                <div>3. Copy ‘API key’ and paste above</div>
+            </div>
+        </div>
+        <div class="dashboard-div">
+            <table class="monitoring-table">
+            </table>
+            <div class="add-new-job">
+                <input class="job-id-input" type="text" name="job-id" placeholder="Enter Job ID">
+                <button id="job-id-submit" class="job-id-submit">
+                    <h4>Submit</h4>
+                </button>
+            </div>
+            </div>
+        </div>
+        <div class='message'>
+            <h2>Loading...</h2>
+        </div>
+    </div>
+    <script src="spider_sense.js"></script>
+</body>
+</html>
