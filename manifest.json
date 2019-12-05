@@ -19,5 +19,5 @@
         "scripts": ["background-script.js"]
     },
 
-    "permissions": ["storage", "notifications"]
+    "permissions": ["storage"]
 }
