@@ -4,6 +4,7 @@
     "name": "Spider Sense",
     "version": "0.1",
     "description": "Spider Sense helps Spider developers working with Scrapy Cloud monitor jobs.",
+    "homepage_url": "https://github.com/realslimshanky/Spider-Sense",
 
     "icons": {
         "48": "icons/SeekClipart.com_blitz-clipart_204510.png"
