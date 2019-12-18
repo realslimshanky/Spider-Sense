@@ -196,7 +196,7 @@ function updateJobsStatus() {
             row.appendChild(column)
 
             column = document.createElement('td')
-            column.innerHTML = job_status.state
+            column.innerHTML = job_status.close_reason ? job_status.close_reason : job_status.state
             row.appendChild(column)
 
             column = document.createElement('td')
