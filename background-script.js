@@ -41,3 +41,10 @@ function saveJobsStatus() {
     browser.storage.local.set({'jobs_status': jobs_status})
 }
 setInterval(saveJobsStatus, refresh_timeout)
+
+browser.runtime.onMessage.addListener(handle_message)
+function handle_message(message) {
+    if (message.run_function == 'updateJobsStatus') {
+        updateJobsStatus()
+    }
+}
