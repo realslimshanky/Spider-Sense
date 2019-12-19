@@ -64,9 +64,13 @@ function saveJobID(job_id) {
         if (job_ids.indexOf(job_id) == -1) {
             job_ids.push(job_id)
             browser.storage.local.set({'job_ids': job_ids})
-            .then(success => {displayMessageAndReplaceDefaultElements('Job ID Saved!')})
+            .then(success => {
+                displayMessageAndReplaceDefaultElements('Job ID Saved!')
+                browser.runtime.sendMessage({'run_function': 'updateJobsStatus'})
+                updateJobsStatus()
+             })
         } else {
-            displayMessageAndReplaceDefaultElements('Job ID exist!')
+            displayMessageAndReplaceDefaultElements('Job ID already exist!')
         }
     })
     .catch(error => {displayMessageAndReplaceDefaultElements(error)})
@@ -101,7 +105,7 @@ function verifyJobID(job_id) {
 }
 
 // Handling new Job ID trigger from HTML
-function addNewJobIDHandler () {
+function addNewJobIDHandler() {
     var job_id = document.querySelector('input.job-id-input').value
     var job_id_regex = /\d+\/\d+\/\d+/g
     job_id = job_id.match(job_id_regex)
