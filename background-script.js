@@ -1,6 +1,8 @@
 const scrapy_cloud_api_url = 'https://app.scrapinghub.com/api/jobs/list.json?'
 const refresh_timeout = 2000
 var jobs_status = {}
+var notification_log = {}
+var notification_reminder_time = 5
 var save_jobs_status = false
 
 // Updating Job Status for all the Job IDs available in local storage
@@ -35,16 +37,67 @@ function updateJobsStatus() {
 }
 setInterval(updateJobsStatus, refresh_timeout)
 
-// Saving Job Status to local storage
-function saveJobsStatus() {
+// Cleaning and Saving Job Status to local storage
+function cleanAndSaveJobsStatus() {
     if (!save_jobs_status) { return }
     browser.storage.local.set({'jobs_status': jobs_status})
 }
-setInterval(saveJobsStatus, refresh_timeout)
+setInterval(cleanAndSaveJobsStatus, refresh_timeout)
 
-browser.runtime.onMessage.addListener(handle_message)
-function handle_message(message) {
+// Handling Messages coming from Popup
+browser.runtime.onMessage.addListener(handleMessage)
+function handleMessage(message) {
     if (message.run_function == 'updateJobsStatus') {
         updateJobsStatus()
     }
 }
+
+function updateNotifications() {
+    // Sending Desktop notifications
+    for (let [key, value] of Object.entries(jobs_status)) {
+        if (!notification_log[key] && value.state == 'finished') {
+            browser.notifications.create({
+                "type": "basic",
+                "iconUrl": browser.extension.getURL("icons/icon.png"),
+                "title": "Spider Sense",
+                "message": value.spider + " " + value.id + " has finished execution."
+            }).then(response=> {
+                notification_log[key] = new Date()
+            })
+        }
+        if (notification_log[key] && value.state == 'finished') {
+            now = new Date()
+            time_difference = (now.getTime() - notification_log[key].getTime()) / (1000 * 60 * 60)
+            if (time_difference > notification_reminder_time) {
+                browser.notifications.create({
+                    "type": "basic",
+                    "iconUrl": browser.extension.getURL("icons/icon.png"),
+                    "title": "Spider Sense",
+                    "message": value.spider + " " + value.id + " has finished execution."
+                }).then(response=> {
+                    notification_log[key] = new Date()
+                })
+            }
+        }
+    }
+}
+setInterval(updateNotifications, refresh_timeout)
+
+// Cleaning job ids which has been removed from the Popup
+function cleanUpObjects() {
+    browser.storage.local.get('job_ids')
+    .then(response => {
+        for (let [key, value] of Object.entries(jobs_status)) {
+            if (!response.job_ids.includes(key)) {
+                delete jobs_status[key]
+            }
+        }
+
+        for (let [key, value] of Object.entries(notification_log)) {
+            if (!response.job_ids.includes(key)) {
+                delete notification_log[key]
+            }
+        }
+    })
+}
+setInterval(cleanUpObjects, refresh_timeout)
