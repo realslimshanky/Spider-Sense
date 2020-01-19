@@ -20,5 +20,5 @@
         "scripts": ["browser-polyfill.min.js", "background-script.js"]
     },
 
-    "permissions": ["storage"]
+    "permissions": ["storage", "notifications"]
 }
