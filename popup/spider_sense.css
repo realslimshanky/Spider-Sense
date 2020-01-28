@@ -89,3 +89,19 @@ th {
   background-color: #424040;
   color: white;
 }
+.job-detail-div {
+    display: none;
+}
+.job-detail-div textarea {
+    width: 350px;
+    height: 100px;
+}
+.display_job_detail {
+    font-weight: bold;
+    color: green;
+    cursor: pointer;
+}
+.back_to_dashboard {
+    font-weight: bold;
+    cursor: pointer;
+}

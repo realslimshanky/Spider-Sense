@@ -9,11 +9,13 @@ var save_jobs_status = false
 function updateJobsStatus() {
     checkAPIKey = browser.storage.local.get('apikey').then(object => object.apikey)
     checkJobIDs = browser.storage.local.get('job_ids').then(object => object.job_ids ? object.job_ids : [])
+    checkJobsStatus = browser.storage.local.get('jobs_status').then(object => object.jobs_status)
 
-    Promise.all([checkAPIKey, checkJobIDs])
+    Promise.all([checkAPIKey, checkJobIDs, checkJobsStatus])
     .then(result => {
         apikey = result[0]
         job_ids = result[1]
+        jobs_status = result[2]
         if (apikey && job_ids.length) {
             for (i = 0; i < job_ids.length; i++) {
                 var job_id = job_ids[i]
@@ -25,7 +27,12 @@ function updateJobsStatus() {
                     response.json()
                     .then(json => {
                         if (response.status == 200 && json.jobs.length) {
-                            jobs_status[json.jobs[0].id] = json.jobs[0]
+                            if (jobs_status[json.jobs[0].id]) {
+                                Object.assign(jobs_status[json.jobs[0].id], JSON.parse(JSON.stringify(json.jobs[0])))
+                            }
+                            else {
+                                jobs_status[json.jobs[0].id] = json.jobs[0]
+                            }
                             save_jobs_status = true
                         }
                     })
@@ -49,6 +56,10 @@ browser.runtime.onMessage.addListener(handleMessage)
 function handleMessage(message) {
     if (message.run_function == 'updateJobsStatus') {
         updateJobsStatus()
+    }
+    if (message.run_function == 'updateComment') {
+        Object.assign(jobs_status[message.job_id], {'comment': message.comment})
+        cleanAndSaveJobsStatus()
     }
 }
 

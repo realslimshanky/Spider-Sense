@@ -151,6 +151,203 @@ function checkAPIKey() {
 }
 checkAPIKey()
 
+// Display Job detail
+function displayJobDetail(object) {
+    function backToDashboard(object) {
+        document.querySelector('.job-detail-div').style.display = 'none'
+        document.querySelector('.dashboard-div').style.display = 'flex'
+        object.target.removeAttribute('selected_job_for_display')
+    }
+
+    function createAndGetDetailRow(first_column_value, second_column_value) {
+        row = document.createElement('tr')
+        column = document.createElement('td')
+        column.innerHTML = first_column_value
+        row.appendChild(column)
+        column = document.createElement('td')
+        column.innerHTML = second_column_value
+        row.appendChild(column)
+        return row
+    }
+
+    function onTextareaChange(job_id) {
+        comment_textarea = document.getElementById('comment_textarea')
+        browser.runtime.sendMessage(
+            {
+                'run_function': 'updateComment',
+                'job_id': job_id,
+                'comment': comment_textarea.value
+            }
+        )
+    }
+
+    object.target.setAttribute('selected_job_for_display', '')
+    job_id = object.target.getAttribute('job_id')
+
+    browser.storage.local.get('jobs_status')
+    .then(response_object => {
+        job_status = response_object.jobs_status
+        job_status = job_status[job_id]
+        if (job_status) {
+            job_detail_table = document.querySelector('.job-detail-table')
+            job_detail_table.innerHTML = ''
+            header_row = document.createElement('tr')
+
+            header_column = document.createElement('th')
+            header_column.innerHTML = '<'
+            header_column.className = 'back_to_dashboard'
+            header_column.addEventListener('click', function() { backToDashboard(object) })
+            header_row.appendChild(header_column)
+            header_column = document.createElement('th')
+            header_column.innerHTML = job_status.spider + ' ' + job_status.id
+            header_row.appendChild(header_column)
+
+            job_detail_table.appendChild(header_row)
+
+            // Row: Spider Name
+            job_detail_table.appendChild(createAndGetDetailRow('Spider Name', job_status.spider))
+
+            // Row: Spider ID
+            row = document.createElement('tr')
+            column = document.createElement('td')
+            column.innerHTML = 'ID'
+            row.appendChild(column)
+            column = document.createElement('td')
+            a_tag = document.createElement('a')
+            a_tag.href = 'https://app.scrapinghub.com/p/' + job_status.id
+            a_tag.innerHTML = job_status.id
+            column.appendChild(a_tag)
+            row.appendChild(column)
+            job_detail_table.appendChild(row)
+
+            // Row: Items Scraped
+            row = document.createElement('tr')
+            column = document.createElement('td')
+            column.innerHTML = 'Items Scraped'
+            row.appendChild(column)
+            column = document.createElement('td')
+            a_tag = document.createElement('a')
+            a_tag.href = 'https://app.scrapinghub.com/p/' + job_status.id + '/items'
+            a_tag.innerHTML = job_status.items_scraped
+            column.appendChild(a_tag)
+            row.appendChild(column)
+            job_detail_table.appendChild(row)
+
+            // Row: Logs
+            row = document.createElement('tr')
+            column = document.createElement('td')
+            column.innerHTML = 'Logs'
+            row.appendChild(column)
+            column = document.createElement('td')
+            a_tag = document.createElement('a')
+            a_tag.href = 'https://app.scrapinghub.com/p/' + job_status.id + '/log'
+            a_tag.innerHTML = job_status.logs
+            column.appendChild(a_tag)
+            row.appendChild(column)
+            job_detail_table.appendChild(row)
+
+            // Row: Errors
+            row = document.createElement('tr')
+            column = document.createElement('td')
+            column.innerHTML = 'Errors'
+            row.appendChild(column)
+            column = document.createElement('td')
+            if (job_status.errors_count) {
+                a_tag = document.createElement('a')
+                a_tag.href = 'https://app.scrapinghub.com/p/' + job_status.id + '/log?filterAndHigher&filterType=error'
+                a_tag.innerHTML = job_status.errors_count
+                column.appendChild(a_tag)
+            }
+            else {
+                column.innerHTML = 'No error'
+            }
+            row.appendChild(column)
+            job_detail_table.appendChild(row)
+
+            // Row: State
+            job_detail_table.appendChild(createAndGetDetailRow('State', job_status.state))
+
+            // Row: Close Reason
+            if (job_status.close_reason) {
+                job_detail_table.appendChild(createAndGetDetailRow('Close Reason', job_status.close_reason))
+            }
+
+            // Row: Spider Arguments
+            row = document.createElement('tr')
+            column = document.createElement('td')
+            column.innerHTML = 'Arguments'
+            row.appendChild(column)
+            column = document.createElement('td')
+            ul = document.createElement('ul')
+            ul.style.listStyleType = 'none'
+            ul.style.paddingLeft = 0
+            if (job_status.spider_args) {
+                for (key in job_status.spider_args) {
+                    li = document.createElement('li')
+                    li.innerHTML = key + '=' + job_status.spider_args[key]
+                    ul.appendChild(li)
+                }
+            }
+            column.appendChild(ul)
+            row.appendChild(column)
+            job_detail_table.appendChild(row)
+
+            // Row: Spider Tags
+            row = document.createElement('tr')
+            column = document.createElement('td')
+            column.innerHTML = 'Tags'
+            row.appendChild(column)
+            column = document.createElement('td')
+            ul = document.createElement('ul')
+            ul.style.listStyleType = 'none'
+            ul.style.paddingLeft = 0
+            if (job_status.tags.length) {
+                for (i=0; i<job_status.tags.length; i++) {
+                    li = document.createElement('li')
+                    li.innerHTML = job_status.tags[i]
+                    ul.appendChild(li)
+                }
+            }
+            column.appendChild(ul)
+            row.appendChild(column)
+            job_detail_table.appendChild(row)
+
+            // Row: Version
+            job_detail_table.appendChild(createAndGetDetailRow('Version', job_status.version))
+
+            // Row: Start Time
+            job_detail_table.appendChild(createAndGetDetailRow('Start Time', job_status.started_time))
+
+            // Row: Last Updated Time
+            job_detail_table.appendChild(createAndGetDetailRow('Updated Time', job_status.updated_time))
+
+            // Row: Priority
+            job_detail_table.appendChild(createAndGetDetailRow('Priority', job_status.priority))
+
+            // Row: Comments
+            row = document.createElement('tr')
+            column = document.createElement('td')
+            column.innerHTML = 'Comments'
+            row.appendChild(column)
+            column = document.createElement('td')
+            textarea = document.createElement('textarea')
+            textarea.setAttribute('id', 'comment_textarea')
+            textarea.placeholder = 'Text will be autosaved as soon as you change it.'
+            if (job_status.comment) {
+                textarea.value = job_status.comment
+            }
+            textarea.addEventListener('keyup', function() {onTextareaChange(job_id)});
+            column.appendChild(textarea)
+            row.appendChild(column)
+            job_detail_table.appendChild(row)
+
+            document.querySelector('.dashboard-div').style.display = 'none'
+            document.querySelector('.job-detail-div').style.display = 'block'
+        }
+    })
+    .catch(error => { console.log(error) })
+}
+
 // Update Jobs Status on HTML table
 function updateJobsStatus() {
     if (!apikey) { return }
@@ -166,7 +363,7 @@ function updateJobsStatus() {
         monitoring_table = document.querySelector('.monitoring-table')
         monitoring_table.innerHTML = ''
         header_row = document.createElement('tr')
-        column_values = ['Job ID', 'Spider', 'Items', 'Errors', 'Status', ' ']
+        column_values = ['Job ID', 'Spider', 'Items', 'Errors', 'Status', ' ', ' ']
         for (var i=0; i < column_values.length; i++) {
             var header_column = document.createElement('th')
             header_column.innerHTML = column_values[i]
@@ -208,6 +405,13 @@ function updateJobsStatus() {
             column.className =  'remove_job_id'
             column.setAttribute('job_id', job_status.id)
             column.addEventListener('click', removeJobID)
+            row.appendChild(column)
+
+            column = document.createElement('td')
+            column.innerHTML = '>'
+            column.className =  'display_job_detail'
+            column.setAttribute('job_id', job_status.id)
+            column.addEventListener('click', displayJobDetail)
             row.appendChild(column)
 
             monitoring_table.appendChild(row)
