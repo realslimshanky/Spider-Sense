@@ -15,7 +15,10 @@ function updateJobsStatus() {
     .then(result => {
         apikey = result[0]
         job_ids = result[1]
-        jobs_status = result[2]
+        stored_jobs_status = result[2]
+        if (!jobs_status && stored_jobs_status) {
+            jobs_status = stored_jobs_status
+        }
         if (apikey && job_ids.length) {
             for (i = 0; i < job_ids.length; i++) {
                 var job_id = job_ids[i]
