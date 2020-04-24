@@ -15,7 +15,9 @@ function verifyAndSaveAPIKey(apikey) {
     api_url = scrapy_cloud_api_url + 'apikey=' + apikey
     fetch(api_url)
     .then(response => {
-        if (response.status == 400 && response.statusText == 'Bad Request') {
+        if (response.status == 400 &&
+                (response.statusText == 'Bad Request' || response.statusText == ''))
+        {
             browser.storage.local.set({'apikey': apikey})
             .then(success => {
                 document.querySelector('.dashboard-div').style.display = 'flex'
@@ -32,7 +34,7 @@ function verifyAndSaveAPIKey(apikey) {
 
 // Handling the API Key input from HTML
 function onAPIKeySubmitHandler() {
-    var apikey = document.querySelector('input.api-key-input').value
+    apikey = document.querySelector('input.api-key-input').value
     var apikey_regex = /[\d\w]*/g
     apikey = apikey.match(apikey_regex)
     if (!apikey) {
