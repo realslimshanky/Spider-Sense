@@ -21,6 +21,7 @@ function verifyAndSaveAPIKey(apikey) {
             browser.storage.local.set({'apikey': apikey})
             .then(success => {
                 document.querySelector('.dashboard-div').style.display = 'flex'
+                document.querySelector('.settings').style.display = 'block'
                 document.querySelector('.message').style.display = 'none'
             })
         } else {
@@ -42,6 +43,7 @@ function onAPIKeySubmitHandler() {
     } else {
         apikey = apikey[0]
         document.querySelector('.content-div').style.display = 'none'
+        document.querySelector('.settings').style.display = 'none'
         document.querySelector('.divider').style.display = 'none'
         document.querySelector('.message').style.display = 'block'
         verifyAndSaveAPIKey(apikey)
@@ -146,6 +148,7 @@ function checkAPIKey() {
             document.querySelector('.content-div').style.display = 'none'
             document.querySelector('.divider').style.display = 'none'
             document.querySelector('.dashboard-div').style.display = 'flex'
+            document.querySelector('.settings').style.display = 'block'
             apikey = object.apikey
             updateJobsStatus()
         }
@@ -158,6 +161,7 @@ function displayJobDetail(object) {
     function backToDashboard(object) {
         document.querySelector('.job-detail-div').style.display = 'none'
         document.querySelector('.dashboard-div').style.display = 'flex'
+        document.querySelector('.settings').style.display = 'block'
         object.target.removeAttribute('selected_job_for_display')
     }
 
@@ -344,6 +348,7 @@ function displayJobDetail(object) {
             job_detail_table.appendChild(row)
 
             document.querySelector('.dashboard-div').style.display = 'none'
+            document.querySelector('.settings').style.display = 'none'
             document.querySelector('.job-detail-div').style.display = 'block'
         }
     })
@@ -421,3 +426,29 @@ function updateJobsStatus() {
     })
 }
 setInterval(updateJobsStatus, refresh_timeout)
+
+
+// Settings Div
+function handleSettingsButton() {
+    if (getComputedStyle(document.querySelector('.settings-div')).display == 'block') {
+        document.querySelector('.dashboard-div').style.display = 'flex'
+        document.querySelector('.settings-div').style.display = 'none'
+    } else {
+        document.querySelector('.dashboard-div').style.display = 'none'
+
+        settings_table = document.querySelector('.settings-table')
+        settings_table.innerHTML = ''
+
+        header_row = document.createElement('tr')
+        header_column = document.createElement('th')
+        header_column.innerHTML = 'Setting'
+        header_row.appendChild(header_column)
+        header_column = document.createElement('th')
+        header_column.innerHTML = 'Value'
+        header_row.appendChild(header_column)
+        settings_table.appendChild(header_row)
+
+        document.querySelector('.settings-div').style.display = 'block'
+    }
+}
+document.querySelector('#settings').addEventListener('click', handleSettingsButton)
