@@ -1,4 +1,4 @@
-const scrapy_cloud_api_url = 'https://app.scrapinghub.com/api/jobs/list.json?'
+const scrapy_cloud_api_url = 'https://app.zyte.com/api/jobs/list.json?'
 const refresh_timeout = 2000
 var jobs_status = {}
 var notification_log = {}

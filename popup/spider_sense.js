@@ -1,4 +1,4 @@
-const scrapy_cloud_api_url = 'https://app.scrapinghub.com/api/jobs/list.json?'
+const scrapy_cloud_api_url = 'https://app.zyte.com/api/jobs/list.json?'
 const refresh_timeout = 2000
 var apikey = ''
 
@@ -220,7 +220,7 @@ function displayJobDetail(object) {
             row.appendChild(column)
             column = document.createElement('td')
             a_tag = document.createElement('a')
-            a_tag.href = 'https://app.scrapinghub.com/p/' + job_status.id
+            a_tag.href = 'https://app.zyte.com/p/' + job_status.id
             a_tag.innerHTML = job_status.id
             column.appendChild(a_tag)
             row.appendChild(column)
@@ -233,7 +233,7 @@ function displayJobDetail(object) {
             row.appendChild(column)
             column = document.createElement('td')
             a_tag = document.createElement('a')
-            a_tag.href = 'https://app.scrapinghub.com/p/' + job_status.id + '/items'
+            a_tag.href = 'https://app.zyte.com/p/' + job_status.id + '/items'
             a_tag.innerHTML = job_status.items_scraped
             column.appendChild(a_tag)
             row.appendChild(column)
@@ -246,7 +246,7 @@ function displayJobDetail(object) {
             row.appendChild(column)
             column = document.createElement('td')
             a_tag = document.createElement('a')
-            a_tag.href = 'https://app.scrapinghub.com/p/' + job_status.id + '/log'
+            a_tag.href = 'https://app.zyte.com/p/' + job_status.id + '/log'
             a_tag.innerHTML = job_status.logs
             column.appendChild(a_tag)
             row.appendChild(column)
@@ -260,7 +260,7 @@ function displayJobDetail(object) {
             column = document.createElement('td')
             if (job_status.errors_count) {
                 a_tag = document.createElement('a')
-                a_tag.href = 'https://app.scrapinghub.com/p/' + job_status.id + '/log?filterAndHigher&filterType=error'
+                a_tag.href = 'https://app.zyte.com/p/' + job_status.id + '/log?filterAndHigher&filterType=error'
                 a_tag.innerHTML = job_status.errors_count
                 column.appendChild(a_tag)
             }
@@ -386,7 +386,7 @@ function updateJobsStatus() {
 
             var column = document.createElement('td')
             var a_tag = document.createElement('a')
-            a_tag.href = 'https://app.scrapinghub.com/p/' + job_status.id
+            a_tag.href = 'https://app.zyte.com/p/' + job_status.id
             a_tag.innerHTML = job_status.id
             column.appendChild(a_tag)
             row.appendChild(column)
