@@ -1,5 +1,5 @@
 # Spider-Sense
-A browser extension to monitor your spiders deployed on Scrapy Cloud.
+A browser extension to monitor your spiders deployed on Zyte Scrapy Cloud.
 
 ## How to install this extension from file?
 

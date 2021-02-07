@@ -3,7 +3,7 @@
     "manifest_version": 2,
     "name": "Spider Sense",
     "version": "0.2",
-    "description": "Spider Sense helps Spider developers working with Scrapy Cloud monitor jobs.",
+    "description": "Spider Sense helps Spider developers working with Zyte Scrapy Cloud monitor jobs.",
     "homepage_url": "https://github.com/realslimshanky/Spider-Sense",
 
     "icons": {
