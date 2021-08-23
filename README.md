@@ -10,7 +10,10 @@ A browser extension to monitor your spiders deployed on Zyte Scrapy Cloud.
 - [Firefox](https://addons.mozilla.org/en-US/firefox/addon/spider-sense/)
 - [Chrome](https://chrome.google.com/webstore/detail/spider-sense/gdpemckobcbpkgibfiiaeoohjccaebfj)
 
-## (Latest updates) How to install this extension from source?
+## How to install this extension from source?
+
+While installing from source will get you the latest updates if unreleased above but the
+extension will be uninstalled automatically as soon as you close the browser.
 
 - Clone the repository
 - Open `about:debugging` on Firefox, click on `This Firefox` and select `Load Temporary Add-on...`

@@ -1,4 +1,5 @@
-const scrapy_cloud_api_url = 'https://app.zyte.com/api/jobs/list.json?'
+const scrapy_cloud_job_list_api_url = 'https://app.zyte.com/api/jobs/list.json?'
+const scrapy_cloud_job_summary_api_url = 'https://storage.scrapinghub.com/jobq/'
 const refresh_timeout = 2000
 var jobs_status = {}
 var notification_log = {}
@@ -26,7 +27,7 @@ function updateJobsStatus() {
                 var job_id = job_ids[i]
                 var project_id_regex = /(\d+)\/\d+\/\d+/i;
                 var project_id = job_id.match(project_id_regex)[1]
-                var api_url = scrapy_cloud_api_url + 'apikey=' + apikey + '&project=' + project_id + '&job=' + job_id
+                var api_url = scrapy_cloud_job_list_api_url + 'apikey=' + apikey + '&project=' + project_id + '&job=' + job_id
                 fetch(api_url)
                 .then(response => {
                     response.json()
@@ -103,7 +104,6 @@ setInterval(updateNotifications, refresh_timeout)
 function cleanUpObjects() {
     browser.storage.local.get('job_ids')
     .then(response => {
-        console.log(response.job_ids)
         for (let [key, value] of Object.entries(jobs_status)) {
             if (!response.job_ids.includes(key)) {
                 delete jobs_status[key]
@@ -118,3 +118,37 @@ function cleanUpObjects() {
     })
 }
 setInterval(cleanUpObjects, refresh_timeout)
+
+// Checking new jobs started on dash
+function checkNewJobs() {
+    checkSavedAPIKey = browser.storage.local.get('apikey').then(object => object.apikey)
+    checkJobIDs = browser.storage.local.get('job_ids').then(object => object.job_ids ? object.job_ids : [])
+
+    Promise.all([checkSavedAPIKey, checkJobIDs])
+    .then(result => {
+        apikey = result[0]
+        job_ids = result[1]
+        spider_ids = []
+
+        job_ids.forEach(job_id => {
+            let spider_id_regex = new RegExp(/\d+\/\d+/g);
+            spider_id = job_id.match(spider_id_regex)
+            if (spider_id && !spider_ids.includes(spider_id[0])) spider_ids.push(spider_id[0])
+        })
+
+        spider_ids.forEach(spider_id => {
+            var api_url = scrapy_cloud_job_summary_api_url + spider_id + '/summary?format=json&reverse=pending&apikey=' + apikey
+            fetch(api_url)
+            .then(response => {
+                response.json()
+                .then(json => {
+                    console.log(json)
+                    // TODO: Store running jobs in global variable
+                    // TODO: Recommend new jobs in addon frontend
+                    // TODO: Cleanup running jobs from global variable in case there's no use of it anymore
+                })
+            })
+        })
+    })
+}
+setInterval(checkNewJobs, refresh_timeout)
