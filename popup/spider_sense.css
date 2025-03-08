@@ -106,6 +106,9 @@ th {
   background-color: #424040;
   color: white;
 }
+.table-container {
+    overflow-x: auto;
+}
 .job-detail-div {
     display: none;
 }
